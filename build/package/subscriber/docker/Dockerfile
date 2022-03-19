@@ -11,7 +11,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -buildvcs=false -o main ./cmd/consumer
+RUN go build -buildvcs=false -o main ./cmd/subscriber
 
 WORKDIR /dist
 RUN cp /build/main .

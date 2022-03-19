@@ -1,8 +1,8 @@
 # For demo purposes
 services:
 
-  cng-hello-nats-consumer:
-    image: cng-hello-nats-consumer
+  cng-hello-nats-subscriber:
+    image: cng-hello-nats-subscriber
     ports:
       - "8081:8080"
     environment:
@@ -18,7 +18,7 @@ services:
       NATS_URL: nats:4222
     depends_on:
      - nats
-     - cng-hello-nats-consumer
+     - cng-hello-nats-subscriber
       
   nats:
     image: 'bitnami/nats:latest'

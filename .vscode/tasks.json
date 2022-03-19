@@ -14,9 +14,9 @@
             }
         },
         {
-            "label": "build consumer image",
+            "label": "build subscriber image",
             "type": "shell",
-            "command": "docker build -f build/package/consumer/docker/Dockerfile -t cng-hello-nats-consumer .",
+            "command": "docker build -f build/package/subscriber/docker/Dockerfile -t cng-hello-nats-subscriber .",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
