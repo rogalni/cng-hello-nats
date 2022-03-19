@@ -20,7 +20,8 @@ services:
      - cng-hello-nats-subscriber
       
   nats:
-    image: 'bitnami/nats:latest'
+    image: 'nats:latest'
+    command: -js -m 8222
     ports:
       - 4222:4222
       - 8222:8222
