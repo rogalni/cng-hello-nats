@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -18,16 +19,16 @@ func main() {
 		log.Fatalf("Error connect to nats: %v", err)
 	}
 	defer nc.Close()
-	time.Sleep(2 * time.Second)
-	count := 50
-	for i := 1; i < count+1; i++ {
-		publish(nc, i)
-		time.Sleep(1 * time.Second)
+	instance := rand.Intn(10)
+	count := 100
+	for i := 0; i < count; i++ {
+		publish(nc, instance, i)
+		time.Sleep(500 * time.Millisecond)
 	}
-
 }
-func publish(nc *nats.Conn, i int) {
-	msg := fmt.Sprintf("Welcome: %d", i)
+
+func publish(nc *nats.Conn, ic int, i int) {
+	msg := fmt.Sprintf("Message from instance: %d, iteration: %d", ic, i)
 	if err := nc.Publish("TEST", []byte(msg)); err != nil {
 		log.Printf("Error publish: %v\n", err)
 	}
