@@ -40,9 +40,9 @@ func subscribeJetStream(nc *nats.Conn) {
 			log.Fatal(err)
 		}
 
-		log.Printf("monitor service subscribes from subject:%s\n", msg.Subject)
+		log.Printf("cng-hello-nats-subscriber service subscribes from subject:%s\n", msg.Subject)
 		log.Printf("MessageId: %d, MessageText: %s\n", m.Id, m.Text)
-	}, nats.Durable("monitor"), nats.ManualAck())
+	}, nats.Durable("cng-hello-nats-subscriber"), nats.ManualAck())
 
 }
 

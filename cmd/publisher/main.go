@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -20,14 +21,12 @@ func main() {
 		log.Fatalf("Error connect to nats: %v", err)
 	}
 	defer nc.Close()
-	// instance := rand.Intn(10)
 
-	// runNats(nc, instance)
-	runJetStream(nc)
-
+	runNatsExample(nc)
+	runJetStreamExample(nc)
 }
 
-func runJetStream(nc *nats.Conn) {
+func runJetStreamExample(nc *nats.Conn) {
 	js, err := nc.JetStream()
 	if err != nil {
 		fmt.Printf("Error init JetStream")
@@ -49,18 +48,15 @@ func runJetStream(nc *nats.Conn) {
 	}
 }
 
-func runNats(nc *nats.Conn, instance int) {
+func runNatsExample(nc *nats.Conn) {
+	ic := rand.Intn(10)
 	count := 100
 	for i := 0; i < count; i++ {
-		publish(nc, instance, i)
+		msg := fmt.Sprintf("Message from instance: %d, iteration: %d", ic, i)
+		if err := nc.Publish("TEST", []byte(msg)); err != nil {
+			log.Printf("Error publish: %v\n", err)
+		}
 		time.Sleep(500 * time.Millisecond)
-	}
-}
-
-func publish(nc *nats.Conn, ic int, i int) {
-	msg := fmt.Sprintf("Message from instance: %d, iteration: %d", ic, i)
-	if err := nc.Publish("TEST", []byte(msg)); err != nil {
-		log.Printf("Error publish: %v\n", err)
 	}
 }
 
@@ -70,7 +66,7 @@ const (
 )
 
 // createStream creates a stream by using JetStreamContext
-func createStream(js nats.JetStreamContext) error {
+func createStream(js nats.JetStreamContext) {
 	// Check if the MESSAGE stream already exists; if not, create it.
 	stream, err := js.StreamInfo(streamName)
 	if err != nil {
@@ -83,8 +79,7 @@ func createStream(js nats.JetStreamContext) error {
 			Subjects: []string{streamSubjects},
 		})
 		if err != nil {
-			return err
+			log.Printf("Error: %v", err)
 		}
 	}
-	return nil
 }
